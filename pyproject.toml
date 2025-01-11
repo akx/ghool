@@ -1,0 +1,31 @@
+[project]
+name = "ghool"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Aarni Koskela", email = "akx@iki.fi" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.1.8",
+    "httpx>=0.28.1",
+    "rich>=13.9.4",
+]
+
+[project.scripts]
+ghool = "ghool.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9.1",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["B", "I", "COM812"]
