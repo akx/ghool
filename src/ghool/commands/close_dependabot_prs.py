@@ -37,13 +37,17 @@ class PRSearchInfo:
     def created_at(self) -> datetime.datetime:
         return datetime.datetime.fromisoformat(self.data["created_at"])
 
-    def close(self, cli: httpx.Client) -> None:
+    def close(self, cli: httpx.Client) -> bool:
         res = cli.patch(
             self.pr_api_url,
             json={"state": "closed"},
             headers={"Accept": "application/vnd.github+json"},
         )
+        if res.status_code == 403:
+            print(f"[red]Failed to close PR {self.repository_qname}#{self.data['number']}[/red]: {res.text}")
+            return False
         res.raise_for_status()
+        return True
 
 
 def search_pulls(cli, user: str) -> Iterable[PRSearchInfo]:
@@ -72,8 +76,11 @@ def close_dependabot_prs(ctx, user: str, really: bool) -> None:
         results = []
         for res in sorted(search_pulls(cli, user), key=lambda res: res.repository_qname):
             assert res.username == "dependabot[bot]"
-            print(res.repository_qname, res.title, res.created_at)
+            print(f"[cyan]{res.repository_qname}[/cyan]", res.title, "-", res.created_at)
             results.append(res)
+        if not results:
+            print(f"[yellow]No open Dependabot PRs found for user {user}.[/yellow]")
+            return
         if really:
             with ThreadPool() as pool:
                 for _ in rich.progress.track(
