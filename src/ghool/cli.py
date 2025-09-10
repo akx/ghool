@@ -4,7 +4,7 @@ import click
 @click.group()
 @click.option(
     "--token",
-    required=True,
+    required=False,
     envvar="GITHUB_TOKEN",
     help="GitHub token (e.g. personal access token).\nAlso read from GITHUB_TOKEN.",
     metavar="TOKEN",
