@@ -15,11 +15,12 @@ Usage: main [OPTIONS] COMMAND [ARGS]...
 
 Options:
   --token TOKEN  GitHub token (e.g. personal access token). Also read from
-                 GITHUB_TOKEN.  [required]
+                 GITHUB_TOKEN.
   --help         Show this message and exit.
 
 Commands:
   close-dependabot-prs  Close PRs created by Dependabot.
+  org-licenses          List an organization's repositories and summarize...
 
 ```
 <!-- end usage -->
